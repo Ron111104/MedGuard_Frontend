@@ -2,18 +2,26 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faTimes, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/router';
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false); // For profile dropdown
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const router = useRouter();
 
+  // Check if the user is logged in on component mount
   useEffect(() => {
+    const loggedInStatus = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(loggedInStatus === "true");
+
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 640);
     };
 
-    // Initial check
+    // Initial check for mobile view
     handleResize();
 
     window.addEventListener("resize", handleResize);
@@ -22,6 +30,19 @@ export default function Home() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // Handle logout functionality
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userEmail");
+    setIsLoggedIn(false);
+    router.push("/login");
+  };
+
+  // Toggle profile dropdown for large screens
+  const toggleProfileDropdown = () => {
+    setIsProfileOpen(!isProfileOpen);
+  };
 
   return (
     <div className="relative w-full h-screen">
@@ -39,24 +60,53 @@ export default function Home() {
         {/* Logo */}
         <div className="flex items-center">
           <Image
-            src="/logo.png"
+            src="/logo3.jpg"
             alt="MedGuard Logo"
-            width={120}  // Adjusted logo size
             height={40}
+            width={140}
           />
         </div>
 
         {/* Navbar Links */}
         {!isMobile ? (
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex space-x-8 items-center">
             <Link href="/" className="text-black">Home</Link>
             <Link href="/about" className="text-black">About Us</Link>
             <Link href="/hospital" className="text-black">Hospital</Link>
             <Link href="/contact" className="text-black">Contact</Link>
-            <div className="flex space-x-4">
-              <Link href="/signin" className="text-black">Sign In</Link>
-              <Link href="/login" className="text-black">Log In</Link>
-            </div>
+
+            {/* Conditional Profile Component */}
+            {isLoggedIn ? (
+              <div className="relative">
+                <button onClick={toggleProfileDropdown} className="flex items-center space-x-2">
+                  {/* Profile image */}
+                  <img
+                    src="https://www.shutterstock.com/image-photo/close-head-shot-portrait-preppy-260nw-1433809418.jpg"
+                    alt="User Avatar"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  {/* Dropdown arrow */}
+                  <FontAwesomeIcon icon={faChevronDown} className="text-black" size="sm" />
+                </button>
+
+                {/* Profile Dropdown */}
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 shadow-md rounded-lg">
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-black hover:bg-gray-100 active:bg-gray-200 transition-all duration-150 ease-in-out"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex space-x-4">
+                <Link href="/signin" className="text-black">Sign In</Link>
+                <Link href="/login" className="text-black">Log In</Link>
+              </div>
+            )}
           </div>
         ) : (
           <button onClick={() => setMenuOpen(!menuOpen)}>
@@ -81,13 +131,13 @@ export default function Home() {
           >
             <FontAwesomeIcon icon={faTimes} className="text-white" size="lg" />
           </button>
-          
+
           {/* Logo */}
           <div className="flex justify-start items-center pl-6 py-4">
             <Image
-              src="/logo.png"
+              src="/logo3.jpg"
               alt="MedGuard Logo"
-              width={150} // Slightly increased logo size for better visibility
+              width={150}
               height={50}
             />
           </div>
@@ -100,11 +150,17 @@ export default function Home() {
             <Link href="/contact" className="w-full text-2xl text-black font-semibold hover:bg-gray-100 active:bg-gray-300 py-4">Contact</Link>
           </div>
 
-          {/* Sign In and Log In Buttons */}
-          <div className="flex justify-center space-x-4 pb-8">
-            <Link href="/signin" className="px-8 py-3 bg-gray-200 text-black rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Sign In</Link>
-            <Link href="/login" className="px-8 py-3 bg-black text-white rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Log In</Link>
-          </div>
+          {/* Conditional rendering based on login status */}
+          {isLoggedIn ? (
+            <div className="flex justify-center space-x-4 pb-8">
+              <button onClick={handleLogout} className="px-8 py-3 bg-black text-white rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Logout</button>
+            </div>
+          ) : (
+            <div className="flex justify-center space-x-4 pb-8">
+              <Link href="/signin" className="px-8 py-3 bg-gray-200 text-black rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Sign In</Link>
+              <Link href="/login" className="px-8 py-3 bg-black text-white rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Log In</Link>
+            </div>
+          )}
         </div>
       )}
     </div>
