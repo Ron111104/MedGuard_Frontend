@@ -106,54 +106,54 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Mobile Menu */}
       {menuOpen && isMobile && (
-        <div
-          className="absolute top-0 left-0 w-full h-full bg-white flex flex-col justify-between z-20"
-          style={{
-            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
-            borderRadius: '0px 0px 20px 20px',
-          }}
-        >
-          {/* Close Button */}
-          <button
-            onClick={() => setMenuOpen(false)}
-            className="absolute top-4 right-4 bg-black rounded-full px-2 py-1"
-          >
-            <FontAwesomeIcon icon={faTimes} className="text-white" size="lg" />
-          </button>
+  <div
+    className="fixed top-0 left-0 w-full h-full bg-white flex flex-col justify-between z-20"
+    style={{
+      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
+      borderRadius: '0px 0px 20px 20px',
+      overflow: 'hidden' // Ensures no content outside the menu is visible
+    }}
+  >
+    {/* Close Button */}
+    <button
+      onClick={() => setMenuOpen(false)}
+      className="absolute top-4 right-4 bg-black rounded-full px-2 py-1"
+    >
+      <FontAwesomeIcon icon={faTimes} className="text-white" size="lg" />
+    </button>
 
-          {/* Logo */}
-          <div className="flex justify-start items-center pl-6 py-4">
-            <Image
-              src="/logo3.jpg"
-              alt="MedGuard Logo"
-              width={150}
-              height={50}
-            />
-          </div>
+    {/* Logo */}
+    <div className="flex justify-start items-center pl-6 py-4">
+      <Image
+        src="/logo3.jpg"
+        alt="MedGuard Logo"
+        width={150}
+        height={50}
+      />
+    </div>
 
-          {/* Menu Links */}
-          <div className="text-center flex flex-col items-center space-y-6">
-            <Link href="/" className="w-full text-2xl text-black font-semibold hover:bg-gray-100 active:bg-gray-300 py-4">Home</Link>
-            <Link href="/about" className="w-full text-2xl text-black font-semibold hover:bg-gray-100 active:bg-gray-300 py-4">About Us</Link>
-            <Link href="/hospital" className="w-full text-2xl text-black font-semibold hover:bg-gray-100 active:bg-gray-300 py-4">Hospital</Link>
-            <Link href="/contact" className="w-full text-2xl text-black font-semibold hover:bg-gray-100 active:bg-gray-300 py-4">Contact</Link>
-          </div>
+    {/* Menu Links */}
+    <div className="text-center flex flex-col items-center space-y-6">
+      <Link href="/" className="w-full text-2xl text-black font-semibold hover:bg-gray-100 active:bg-gray-300 py-4">Home</Link>
+      <Link href="/about" className="w-full text-2xl text-black font-semibold hover:bg-gray-100 active:bg-gray-300 py-4">About Us</Link>
+      <Link href="/hospital" className="w-full text-2xl text-black font-semibold hover:bg-gray-100 active:bg-gray-300 py-4">Hospital</Link>
+      <Link href="/contact" className="w-full text-2xl text-black font-semibold hover:bg-gray-100 active:bg-gray-300 py-4">Contact</Link>
+    </div>
 
-          {/* Conditional rendering based on login status */}
-          {isLoggedIn ? (
-            <div className="flex justify-center space-x-4 pb-8">
-              <button onClick={handleLogout} className="px-8 py-3 bg-black text-white rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Logout</button>
-            </div>
-          ) : (
-            <div className="flex justify-center space-x-4 pb-8">
-              <Link href="/signin" className="px-8 py-3 bg-gray-200 text-black rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Sign In</Link>
-              <Link href="/login" className="px-8 py-3 bg-black text-white rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Log In</Link>
-            </div>
-          )}
-        </div>
-      )}
+    {/* Conditional rendering based on login status */}
+    {isLoggedIn ? (
+      <div className="flex justify-center space-x-4 pb-8">
+        <button onClick={handleLogout} className="px-8 py-3 bg-black text-white rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Logout</button>
+      </div>
+    ) : (
+      <div className="flex justify-center space-x-4 pb-8">
+        <Link href="/signin" className="px-8 py-3 bg-gray-200 text-black rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Sign In</Link>
+        <Link href="/login" className="px-8 py-3 bg-black text-white rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Log In</Link>
+      </div>
+    )}
+  </div>
+)}
     </div>
   );
 }
