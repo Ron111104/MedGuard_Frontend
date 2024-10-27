@@ -1,0 +1,26 @@
+{
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-medguardfrontend-main-03d05-authRole",
+      "UnauthRoleArn": "arn:aws:iam::024848484759:role/amplify-medguardfrontend-main-03d05-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::024848484759:role/amplify-medguardfrontend-main-03d05-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-medguardfrontend-main-03d05-deployment",
+      "UnauthRoleName": "amplify-medguardfrontend-main-03d05-unauthRole",
+      "StackName": "amplify-medguardfrontend-main-03d05",
+      "StackId": "arn:aws:cloudformation:ap-south-1:024848484759:stack/amplify-medguardfrontend-main-03d05/8ed40a90-9445-11ef-b705-0267c77fc89f",
+      "AmplifyAppId": "d28eyovqon5iwe"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d28eyovqon5iwe",
+          "type": "cicd"
+        }
+      },
+      "auth": {
+        "medguardfrontend0d047b70": {}
+      }
+    }
+  }
+}
