@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
-
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 640);
@@ -33,7 +32,7 @@ export default function Home() {
       />
 
       {/* Navbar */}
-      <Navbar />
+      <Navbar/>
 
       {/* Rest of your home page content */}
     </div>

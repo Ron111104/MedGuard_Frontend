@@ -1,30 +1,28 @@
+// components/Navbar.js
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
+import { useAuth } from "../context/AuthContext"; // Import useAuth from the context
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false); // For profile dropdown
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const router = useRouter();
 
-  // Check if the user is logged in on component mount
-  useEffect(() => {
-    const loggedInStatus = localStorage.getItem("isLoggedIn");
-    setIsLoggedIn(loggedInStatus === "true");
+  // Use the context to get user and signOut
+  const { user, signOut } = useAuth();
+  const isLoggedIn = Boolean(user);
 
+  useEffect(() => {
     const handleResize = () => {
-      // Synchronize the breakpoint with the tailwind `md` breakpoint (768px)
       setIsMobile(window.innerWidth <= 768);
     };
 
-    // Initial check for mobile view
     handleResize();
-
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -33,11 +31,12 @@ export default function Navbar() {
   }, []);
 
   // Handle logout functionality
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userEmail");
-    setIsLoggedIn(false);
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (err) {
+      console.log("Error signing out:", err);
+    }
   };
 
   // Toggle profile dropdown for large screens
@@ -53,7 +52,7 @@ export default function Navbar() {
           <Image
             src="/logo3.jpg"
             alt="MedGuard Logo"
-            className="h-[50px] w-auto" // Fixed height and auto width to maintain proportions
+            className="h-[50px] w-auto"
             height={50}
             width={150}
           />
@@ -68,16 +67,14 @@ export default function Navbar() {
             <Link href="/contact" className="text-black">Contact</Link>
 
             {/* Conditional Profile Component */}
-            {isLoggedIn ? (
+            {isLoggedIn && (
               <div className="relative">
                 <button onClick={toggleProfileDropdown} className="flex items-center space-x-2">
-                  {/* Profile image */}
                   <img
-                    src="https://www.shutterstock.com/image-photo/close-head-shot-portrait-preppy-260nw-1433809418.jpg"
+                    src={user?.attributes?.picture || "https://www.shutterstock.com/image-photo/close-head-shot-portrait-preppy-260nw-1433809418.jpg"}
                     alt="User Avatar"
                     className="w-10 h-10 rounded-full object-cover"
                   />
-                  {/* Dropdown arrow */}
                   <FontAwesomeIcon icon={faChevronDown} className="text-black" size="sm" />
                 </button>
 
@@ -94,11 +91,6 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-            ) : (
-              <div className="flex space-x-4">
-                <Link href="/signin" className="text-black">Sign In</Link>
-                <Link href="/login" className="text-black">Log In</Link>
-              </div>
             )}
           </div>
         ) : (
@@ -114,7 +106,7 @@ export default function Navbar() {
           style={{
             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
             borderRadius: '0px 0px 20px 20px',
-            overflow: 'hidden', // Ensures no content outside the menu is visible
+            overflow: 'hidden',
           }}
         >
           {/* Close Button */}
@@ -130,7 +122,7 @@ export default function Navbar() {
             <Image
               src="/logo3.jpg"
               alt="MedGuard Logo"
-              className="h-[50px] w-auto" // Same height and width in the mobile view to maintain consistency
+              className="h-[50px] w-auto"
               width={150}
               height={50}
             />
@@ -145,14 +137,9 @@ export default function Navbar() {
           </div>
 
           {/* Conditional rendering based on login status */}
-          {isLoggedIn ? (
+          {isLoggedIn && (
             <div className="flex justify-center space-x-4 pb-8">
               <button onClick={handleLogout} className="px-8 py-3 bg-black text-white rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Logout</button>
-            </div>
-          ) : (
-            <div className="flex justify-center space-x-4 pb-8">
-              <Link href="/signin" className="px-8 py-3 bg-gray-200 text-black rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Sign In</Link>
-              <Link href="/login" className="px-8 py-3 bg-black text-white rounded-xl text-xl hover:shadow-lg hover:shadow-gray-300">Log In</Link>
             </div>
           )}
         </div>
