@@ -49,20 +49,23 @@ export default function Navbar() {
       <div className="fixed top-0 left-0 w-full p-4 flex justify-between items-center bg-white z-10">
         {/* Logo */}
         <div className="flex items-center">
-          <Image
-            src="/logo3.jpg"
-            alt="MedGuard Logo"
-            className="h-[50px] w-auto"
-            height={50}
-            width={150}
-          />
-        </div>
+  <Link href="/">
+    <Image
+      src="/logo3.jpg"
+      alt="MedGuard Logo"
+      className="h-[50px] w-auto cursor-pointer"
+      height={50}
+      width={150}
+    />
+  </Link>
+</div>
 
         {/* Navbar Links */}
         {!isMobile ? (
           <div className="hidden md:flex space-x-8 items-center">
             <Link href="/" className="text-black">Home</Link>
             <Link href="/about" className="text-black">About Us</Link>
+            <Link href="/symptoms" className="text-black">Diagnosis</Link>
             <Link href="/hospital" className="text-black">Hospital</Link>
             <Link href="/contact" className="text-black">Contact</Link>
 
